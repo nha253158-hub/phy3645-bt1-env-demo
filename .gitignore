@@ -1,0 +1,12 @@
+# Moi truong ao: KHONG commit, chi commit file khai bao (requirements.txt, uv.lock, environment.yml)
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# log cua buoc push (dang ghi trong luc commit)
+logs/5_git_push.log
+
+# file lon
+*.iso
+*.vdi

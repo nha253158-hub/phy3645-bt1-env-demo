@@ -1,0 +1,83 @@
+# 3_vm.log | 2026-11-12 01:32:01 | LAPTOP-CP64U399 | Microsoft Windows NT 10.0.26300.0
+
+======================================================================
+== Host machine (Windows, physical)
+======================================================================
+OS      : Microsoft Windows 11 Home (build 26300)
+CPU     : 12th Gen Intel(R) Core(TM) i7-1255U - 12 logical processors
+RAM     : 7.7 GB
+
+======================================================================
+== VirtualBox = type-2 hypervisor
+======================================================================
+
+> VBoxManage --version
+7.2.22r175245
+
+> VBoxManage list vms
+"rpi" {19d384f6-c79a-412d-85dd-2c0670e5c93e}
+
+======================================================================
+== Create VM 'phy3645-alpine' (virtual hardware)
+======================================================================
+downloading alpine-virt-3.22.2-x86_64.iso ...
+
+> VBoxManage createvm --name phy3645-alpine --ostype Linux_64 --register
+Virtual machine 'phy3645-alpine' is created and registered.
+UUID: e6c636bb-3aaa-470a-b6a7-b0c45564f7c2
+Settings file: 'C:\Users\HP\VirtualBox VMs\phy3645-alpine\phy3645-alpine.vbox'
+
+> VBoxManage modifyvm phy3645-alpine --memory 512 --cpus 1 --nic1 nat --graphicscontroller vmsvga --vram 16
+
+> VBoxManage createmedium disk --filename phy3645-alpine.vdi --size 2048
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+Medium created. UUID: e99095d0-e905-4d2a-9e19-13a2ede93e40
+
+> VBoxManage storagectl phy3645-alpine --name SATA --add sata
+
+> VBoxManage storageattach phy3645-alpine ... --type hdd --medium phy3645-alpine.vdi
+
+> VBoxManage storageattach phy3645-alpine ... --type dvddrive --medium alpine-virt-3.22.2-x86_64.iso
+
+> VBoxManage showvminfo phy3645-alpine --machinereadable   (filtered)
+name="phy3645-alpine"
+ostype="Other Linux (64-bit)"
+memory=512
+vram=16
+firmware="BIOS"
+cpus=1
+VMState="poweroff"
+graphicscontroller="vmsvga"
+"SATA-0-0"="C:\\Users\\HP\\VirtualBox VMs\\phy3645-alpine\\phy3645-alpine.vdi"
+"SATA-1-0"="C:\\Users\\HP\\VirtualBox VMs\\iso\\alpine-virt-3.22.2-x86_64.iso"
+nic1="nat"
+
+======================================================================
+== Boot the VM and run commands INSIDE it
+======================================================================
+
+> VBoxManage startvm phy3645-alpine --type headless
+Waiting for VM "phy3645-alpine" to power on...
+VM "phy3645-alpine" has been successfully started.
+waiting 75 s for Alpine to boot...
+
+> (typed into the VM console)  clear; uname -a; head -3 /etc/os-release; echo CPUs: $(nproc); free -m; fdisk -l /dev/sda | head -1; dmesg | grep -m1 -i hypervisor
+
+> VBoxManage controlvm phy3645-alpine screenshotpng 07-vm\vm_console.png
+
+======================================================================
+== Power off the VM
+======================================================================
+
+> VBoxManage controlvm phy3645-alpine poweroff
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+
+> VBoxManage list vms
+"rpi" {19d384f6-c79a-412d-85dd-2c0670e5c93e}
+"phy3645-alpine" {e6c636bb-3aaa-470a-b6a7-b0c45564f7c2}
+
+======================================================================
+== DONE
+======================================================================
+Screenshot of the VM console: 07-vm\vm_console.png
+Log saved to logs\3_vm.log

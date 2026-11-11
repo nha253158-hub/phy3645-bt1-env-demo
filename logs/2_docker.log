@@ -1,0 +1,264 @@
+# 2_docker.log | 2026-11-12 01:31:45 | LAPTOP-CP64U399 | Microsoft Windows NT 10.0.26300.0
+
+======================================================================
+== Docker engine
+======================================================================
+
+> docker --version
+Docker version 29.9.3, build 5457199
+
+> docker info --format "OS / kernel / CPU / RAM of the Docker host"
+OS=Docker Desktop | Kernel=6.6.87.2-microsoft-standard-WSL2 | CPUs=12 | MemTotal=3933417472
+
+======================================================================
+== A. Build and run our own image (06-docker\Dockerfile)
+======================================================================
+
+> type 06-docker\Dockerfile
+# Demo image: Python 3.12 tren Debian slim + requests, chay app.py
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Cai dependency truoc de tan dung layer cache khi chi sua code
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY app.py .
+
+CMD ["python", "app.py"]
+
+> docker build -t phy3645-env-demo 06-docker
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile:
+#1 transferring dockerfile: 323B 0.0s done
+#1 DONE 0.2s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 5.3s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.1s
+
+#4 [1/5] FROM docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+#4 resolve docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b 0.1s done
+#4 ...
+
+#5 [internal] load build context
+#5 transferring context: 864B 0.1s done
+#5 DONE 0.2s
+
+#4 [1/5] FROM docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+#4 sha256:05e0eee5572e9c9f50408a2132590133b830a668a1cf2ff2b150f19c57707e2b 0B / 248B 0.2s
+#4 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 0B / 12.12MB 0.2s
+#4 sha256:68bced9e0afa4479df17c3646e27c7c7e9ce9ba70c0e6c73b6826487b89037d9 0B / 1.29MB 0.2s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 0B / 29.86MB 0.2s
+#4 sha256:05e0eee5572e9c9f50408a2132590133b830a668a1cf2ff2b150f19c57707e2b 248B / 248B 0.4s done
+#4 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 1.05MB / 12.12MB 0.9s
+#4 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 1.98MB / 12.12MB 1.2s
+#4 sha256:68bced9e0afa4479df17c3646e27c7c7e9ce9ba70c0e6c73b6826487b89037d9 1.29MB / 1.29MB 1.4s done
+#4 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 3.36MB / 12.12MB 1.5s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 2.10MB / 29.86MB 1.5s
+#4 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 4.19MB / 12.12MB 1.7s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 4.19MB / 29.86MB 1.7s
+#4 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 5.24MB / 12.12MB 1.8s
+#4 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 6.06MB / 12.12MB 2.0s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 6.29MB / 29.86MB 2.0s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 9.44MB / 29.86MB 2.3s
+#4 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 7.34MB / 12.12MB 2.4s
+#4 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 8.39MB / 12.12MB 2.6s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 11.53MB / 29.86MB 2.6s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 13.63MB / 29.86MB 2.9s
+#4 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 9.44MB / 12.12MB 3.0s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 16.78MB / 29.86MB 3.2s
+#4 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 10.49MB / 12.12MB 3.3s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 18.87MB / 29.86MB 3.6s
+#4 sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 12.12MB / 12.12MB 3.8s done
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 22.02MB / 29.86MB 3.9s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 25.17MB / 29.86MB 4.7s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 27.26MB / 29.86MB 4.8s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 29.86MB / 29.86MB 5.1s
+#4 sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 29.86MB / 29.86MB 5.2s done
+#4 extracting sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41
+#4 extracting sha256:37fb86c2a767b88d500c6872195f88078f64765fe0d2f9cc375cc2efbd4c0a41 1.5s done
+#4 DONE 7.1s
+
+#4 [1/5] FROM docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+#4 extracting sha256:68bced9e0afa4479df17c3646e27c7c7e9ce9ba70c0e6c73b6826487b89037d9 0.1s done
+#4 DONE 7.3s
+
+#4 [1/5] FROM docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+#4 extracting sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085
+#4 extracting sha256:2dc99d2d0a39fce31e37615eb4c932e16dcc4c2b0ce9993714280081b5dbe085 0.9s done
+#4 DONE 8.1s
+
+#4 [1/5] FROM docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+#4 extracting sha256:05e0eee5572e9c9f50408a2132590133b830a668a1cf2ff2b150f19c57707e2b 0.0s done
+#4 DONE 8.2s
+
+#6 [2/5] WORKDIR /app
+#6 DONE 0.6s
+
+#7 [3/5] COPY requirements.txt .
+#7 DONE 0.1s
+
+#8 [4/5] RUN pip install --no-cache-dir -r requirements.txt
+#8 3.552 Collecting requests==2.32.3 (from -r requirements.txt (line 1))
+#8 3.889   Downloading requests-2.32.3-py3-none-any.whl.metadata (4.6 kB)
+#8 4.223 Collecting charset-normalizer<4,>=2 (from requests==2.32.3->-r requirements.txt (line 1))
+#8 4.284   Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+#8 4.411 Collecting idna<4,>=2.5 (from requests==2.32.3->-r requirements.txt (line 1))
+#8 4.473   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+#8 4.598 Collecting urllib3<3,>=1.21.1 (from requests==2.32.3->-r requirements.txt (line 1))
+#8 4.658   Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+#8 4.738 Collecting certifi>=2017.4.17 (from requests==2.32.3->-r requirements.txt (line 1))
+#8 4.796   Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+#8 4.871 Downloading requests-2.32.3-py3-none-any.whl (64 kB)
+#8 4.985 Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+#8 5.100 Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (257 kB)
+#8 5.206 Downloading idna-3.20-py3-none-any.whl (69 kB)
+#8 5.274 Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+#8 5.320 Installing collected packages: urllib3, idna, charset-normalizer, certifi, requests
+#8 5.637 Successfully installed certifi-2026.10.23 charset-normalizer-3.5.2 idna-3.20 requests-2.32.3 urllib3-2.8.0
+#8 5.637 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#8 6.077 
+#8 6.077 [notice] A new release of pip is available: 25.0.1 -> 26.3
+#8 6.077 [notice] To update, run: pip install --upgrade pip
+#8 DONE 6.3s
+
+#9 [5/5] COPY app.py .
+#9 DONE 0.1s
+
+#10 exporting to image
+#10 exporting layers
+#10 exporting layers 1.0s done
+#10 exporting manifest sha256:5be82e3b2b012ee0e9c617c1faedfd05703a5794a96bcf5cd58221d6d2e7a2a8 0.0s done
+#10 exporting config sha256:60304ca940d329aaf1a49c4baa4f30954df72f338aaa5e4cf79f7ddbfe064d69 0.0s done
+#10 exporting attestation manifest sha256:c3bd2d33149406ad382049c4865a0934589efab544c4f7a0de45bb213851a4aa 0.1s done
+#10 exporting manifest list sha256:09288c28164efcca8cdd1ec294a85cdf778b94852ec0f0b3c32b55d608087b21
+#10 exporting manifest list sha256:09288c28164efcca8cdd1ec294a85cdf778b94852ec0f0b3c32b55d608087b21 0.0s done
+#10 naming to docker.io/library/phy3645-env-demo:latest 0.0s done
+#10 unpacking to docker.io/library/phy3645-env-demo:latest
+#10 unpacking to docker.io/library/phy3645-env-demo:latest 2.1s done
+#10 DONE 3.4s
+
+> docker run --rm phy3645-env-demo
+Hello from inside a Docker container!
+hostname    : e776da52412b (= container ID)
+os (userland): Debian GNU/Linux 13 (trixie)
+kernel      : Linux 6.6.87.2-microsoft-standard-WSL2
+python      : 3.12.16 at /usr/local/bin/python
+requests    : 2.32.3
+
+> docker images phy3645-env-demo
+IMAGE                     ID             DISK USAGE   CONTENT SIZE   EXTRA
+phy3645-env-demo:latest   09288c28164e        195MB         47.7MB        
+
+======================================================================
+== B. Isolation: each container has its own userland, processes, hostname
+======================================================================
+
+> docker run --rm alpine cat /etc/os-release
+Unable to find image 'alpine:latest' locally
+latest: Pulling from library/alpine
+881fc932939e: Pulling fs layer
+881fc932939e: Download complete
+86ff264fe568: Download complete
+c35a7d82b8fa: Download complete
+881fc932939e: Pull complete
+Digest: sha256:f59abe656b692d901e184be3445e084786602108599d2a51d229c0f5a48c71bf
+Status: Downloaded newer image for alpine:latest
+NAME="Alpine Linux"
+ID=alpine
+VERSION_ID=3.24.4
+PRETTY_NAME="Alpine Linux v3.24"
+HOME_URL="https://alpinelinux.org/"
+BUG_REPORT_URL="https://gitlab.alpinelinux.org/alpine/aports/-/issues"
+
+> docker run --rm alpine ps
+PID   USER     TIME  COMMAND
+    1 root      0:00 ps
+
+> docker run --rm alpine hostname
+9b39f6a6689a
+
+======================================================================
+== C. ...but they all share ONE kernel (the Linux kernel of the WSL2 VM)
+======================================================================
+
+> ver   (Windows host)
+
+Microsoft Windows [Version 10.0.26300.9818]
+
+> docker run --rm alpine uname -r
+6.6.87.2-microsoft-standard-WSL2
+
+> docker run --rm python:3.12-slim uname -r
+Unable to find image 'python:3.12-slim' locally
+3.12-slim: Pulling from library/python
+Digest: sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+Status: Downloaded newer image for python:3.12-slim
+6.6.87.2-microsoft-standard-WSL2
+
+> wsl -d docker-desktop uname -r   (the WSL2 VM itself)
+6.6.87.2-microsoft-standard-WSL2
+
+======================================================================
+== D. Container lifecycle + port mapping (nginx web server)
+======================================================================
+
+> docker run -d --name phy3645-web -p 8080:80 nginx:alpine
+Unable to find image 'nginx:alpine' locally
+alpine: Pulling from library/nginx
+da90db506dd5: Pulling fs layer
+881fc932939e: Pulling fs layer
+69d81d552257: Pulling fs layer
+1abafee971b9: Pulling fs layer
+a746bd1dc828: Pulling fs layer
+e011f124249b: Pulling fs layer
+b9c6ee6a30f8: Pulling fs layer
+c7dfd64eeb02: Pulling fs layer
+881fc932939e: Already exists
+69d81d552257: Download complete
+b9c6ee6a30f8: Download complete
+1abafee971b9: Download complete
+a746bd1dc828: Download complete
+e011f124249b: Download complete
+c7dfd64eeb02: Download complete
+8801fee91458: Download complete
+1abafee971b9: Pull complete
+e011f124249b: Pull complete
+c7dfd64eeb02: Pull complete
+a746bd1dc828: Pull complete
+b9c6ee6a30f8: Pull complete
+69d81d552257: Pull complete
+4c900eca9c64: Download complete
+da90db506dd5: Download complete
+da90db506dd5: Pull complete
+Digest: sha256:713fc2ebfd92e8217db451477182ee91944b123d2b1ee9fd5a8c6e91ca6c3a11
+Status: Downloaded newer image for nginx:alpine
+21d581f00487de2e1eca1b3ed2c3610f267d2be01b5a17be6531639d31c9e9be
+
+> docker ps
+CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                                     NAMES
+21d581f00487   nginx:alpine   "/docker-entrypoint.…"   5 seconds ago   Up 3 seconds   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   phy3645-web
+
+> curl http://localhost:8080
+HTTP 200  title: Welcome to nginx!
+
+> docker stop phy3645-web
+phy3645-web
+
+> docker rm phy3645-web
+phy3645-web
+
+> docker ps -a --filter name=phy3645
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+======================================================================
+== DONE
+======================================================================
+Log saved to logs\2_docker.log

@@ -1,0 +1,304 @@
+# 1_python_envs.log | 2026-11-12 01:12:07 | LAPTOP-CP64U399 | Microsoft Windows NT 10.0.26300.0
+
+======================================================================
+== 0. System Python (no environment)
+======================================================================
+system python = C:\Users\HP\AppData\Local\Programs\Python\Python313\python.exe
+
+> python demo_app\check_env.py
+python      : 3.13.7
+executable  : C:\Users\HP\AppData\Local\Programs\Python\Python313\python.exe
+sys.prefix  : C:\Users\HP\AppData\Local\Programs\Python\Python313
+isolated env: False
+requests    : (not installed)
+os          : Windows 11
+
+======================================================================
+== 1. venv (standard library)
+======================================================================
+
+> python -m venv 01-venv\.venv
+
+> 01-venv\.venv\Scripts\activate   (then)   pip install requests==2.31.0
+
+> python demo_app\check_env.py
+python      : 3.13.7
+executable  : C:\Users\HP\Documents\phy3645-bt1-env-demo\01-venv\.venv\Scripts\python.exe
+sys.prefix  : C:\Users\HP\Documents\phy3645-bt1-env-demo\01-venv\.venv
+isolated env: True
+requests    : 2.31.0
+os          : Windows 11
+
+> type 01-venv\requirements.txt
+certifi==2026.10.23
+charset-normalizer==3.5.2
+idna==3.20
+requests==2.31.0
+urllib3==2.8.0
+
+======================================================================
+== 2. virtualenv (third-party, superset of venv)
+======================================================================
+
+> pip install --user virtualenv
+  WARNING: The script virtualenv.exe is installed in 'C:\Users\HP\AppData\Roaming\Python\Python313\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+
+> virtualenv --version
+virtualenv 21.15.6 from C:\Users\HP\AppData\Roaming\Python\Python313\site-
+packages\virtualenv\__init__.py
+
+> virtualenv 02-virtualenv\.venv
+created virtual environment CPython3.13.7.final.0-64-x86_64 in 21611ms
+  creator CPython3Windows(dest=C:\Users\HP\Documents\phy3645-bt1-env-demo\02-virtualenv\.venv, clear=False, no_vcs_ignore=False, venv_redirect=None, global=False)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=C:\Users\HP\AppData\Local\pypa\virtualenv\Cache)
+    added seed packages: pip==26.3
+  activators BashActivator,BatchActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator,XonshActivator
+
+> 02-virtualenv\.venv\Scripts\activate   (then)   pip install requests==2.28.2
+
+> python demo_app\check_env.py
+python      : 3.13.7
+executable  : C:\Users\HP\Documents\phy3645-bt1-env-demo\02-virtualenv\.venv\Scripts\python.exe
+sys.prefix  : C:\Users\HP\Documents\phy3645-bt1-env-demo\02-virtualenv\.venv
+isolated env: True
+requests    : 2.28.2
+os          : Windows 11
+
+> type 02-virtualenv\requirements.txt
+certifi==2026.10.23
+charset-normalizer==3.5.2
+idna==3.20
+requests==2.28.2
+urllib3==1.26.20
+
+======================================================================
+== 3. uv (Astral, Rust): Python versions + venv + packages + lockfile
+======================================================================
+
+> uv --version
+uv 0.11.29 (901092ee1 2026-07-15 x86_64-pc-windows-msvc)
+
+> uv init --name uv-demo --python 3.11 --vcs none --no-readme
+Initialized project `uv-demo`
+
+> uv python install 3.11
+Downloading cpython-3.11.15-windows-x86_64-none (download) (24.5MiB)
+ Downloaded cpython-3.11.15-windows-x86_64-none (download)
+Installed Python 3.11.15 in 20.88s
+ + cpython-3.11.15-windows-x86_64-none (python3.11.exe)
+
+> uv add requests==2.32.3
+Using CPython 3.11.15
+Creating virtual environment at: .venv
+Resolved 6 packages in 2.47s
+Prepared 5 packages in 1.00s
+Installed 5 packages in 290ms
+ + certifi==2026.10.23
+ + charset-normalizer==3.5.2
+ + idna==3.20
+ + requests==2.32.3
+ + urllib3==2.8.0
+
+> uv run python ..\demo_app\check_env.py
+python      : 3.11.15
+executable  : C:\Users\HP\Documents\phy3645-bt1-env-demo\03-uv\.venv\Scripts\python.exe
+sys.prefix  : C:\Users\HP\Documents\phy3645-bt1-env-demo\03-uv\.venv
+isolated env: True
+requests    : 2.32.3
+os          : Windows 10
+
+> uv python list --only-installed
+cpython-3.13.7-windows-x86_64-none     C:\Users\HP\AppData\Local\Programs\Python\Python313\python.exe
+cpython-3.12.13-windows-x86_64-none    C:\Users\HP\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\python.exe
+cpython-3.11.15-windows-x86_64-none    C:\Users\HP\AppData\Roaming\uv\python\cpython-3.11.15-windows-x86_64-none\python.exe
+cpython-3.11.15-windows-x86_64-none    C:\Users\HP\.local\bin\python3.11.exe
+cpython-3.11.15-windows-x86_64-none    C:\Users\HP\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\python.exe
+cpython-3.11.9-windows-x86_64-none     C:\Users\HP\AppData\Local\Programs\Python\Python311\python.exe
+cpython-3.8.0-windows-x86_64-none      C:\Users\HP\AppData\Local\Programs\Python\Python38\python.exe
+
+> type 03-uv\pyproject.toml
+[project]
+name = "uv-demo"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.11"
+dependencies = [
+    "requests==2.32.3",
+]
+
+======================================================================
+== 4. pyenv-win (several Python versions side by side)
+======================================================================
+
+> install pyenv-win with the official script install-pyenv-win.ps1
+
+
+    Directory: C:\Users\HP
+
+
+Mode                 LastWriteTime         Length Name                                                                 
+----                 -------------         ------ ----                                                                 
+d-----        11/12/2026   1:15 AM                .pyenv                                                               
+pyenv-win is successfully installed. You may need to close and reopen your terminal before using it.
+
+
+
+> pyenv --version
+pyenv 3.1.1
+
+> pyenv install -s 3.10.11
+:: [Info] ::  Mirror: https://www.python.org/ftp/python
+:: [Info] ::  Mirror: https://downloads.python.org/pypy/versions.json
+:: [Info] ::  Mirror: https://api.github.com/repos/oracle/graalpython/releases
+:: [Downloading] ::  3.10.11 ...
+:: [Downloading] ::  From https://www.python.org/ftp/python/3.10.11/python-3.10.11-amd64.exe
+:: [Downloading] ::  To   C:\Users\HP\.pyenv\pyenv-win\install_cache\python-3.10.11-amd64.exe
+:: [Installing] ::  3.10.11 ...
+:: [Info] :: completed! 3.10.11
+
+> pyenv local 3.10.11
+
+> pyenv versions
+* 3.10.11 (set by C:\Users\HP\Documents\phy3645-bt1-env-demo\04-pyenv\.python-version)
+
+> pyenv which python
+C:\Users\HP\.pyenv\pyenv-win\versions\3.10.11\python.exe
+
+> python ..\demo_app\check_env.py   (python resolved by pyenv local)
+python      : 3.10.11
+executable  : C:\Users\HP\.pyenv\pyenv-win\versions\3.10.11\python.exe
+sys.prefix  : C:\Users\HP\.pyenv\pyenv-win\versions\3.10.11
+isolated env: False
+requests    : (not installed)
+os          : Windows 10
+
+> type 04-pyenv\.python-version
+3.10.11
+
+======================================================================
+== 5. conda (Miniconda): env + Python + non-Python packages
+======================================================================
+
+> conda --version
+conda 26.1.1
+
+> conda create -n phy3645-demo -c conda-forge python=3.9 requests=2.27 -y
+Retrieving notices: ...working... done
+Channels:
+ - conda-forge
+Platform: win-64
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: C:\Users\HP\miniconda3\envs\phy3645-demo
+
+  added / updated specs:
+    - python=3.9
+    - requests=2.27
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    brotli-python-1.1.0        |   py39ha51f57c_3         314 KB  conda-forge
+    bzip2-1.0.8                |      h0ad9c76_10          55 KB  conda-forge
+    ca-certificates-2026.10.23 |       h4c7d964_0         127 KB  conda-forge
+    certifi-2025.8.3           |     pyhd8ed1ab_0         155 KB  conda-forge
+    charset-normalizer-2.0.12  |     pyhd8ed1ab_0          35 KB  conda-forge
+    idna-3.11                  |     pyhf9edf01_1          58 KB  conda-forge
+    libexpat-2.9.0             |       hac47afa_0          71 KB  conda-forge
+    libffi-3.7.0               |       h3d046cb_1          49 KB  conda-forge
+    liblzma-5.8.3              |       hfd05255_1         103 KB  conda-forge
+    libsqlite-3.54.1           |     hf5d6505_101         1.3 MB  conda-forge
+    libzlib-1.3.2              |       hfd05255_3          57 KB  conda-forge
+    openssl-3.6.5              |       hf411b9b_0         9.0 MB  conda-forge
+    pip-25.2                   |     pyh8b19718_0         1.1 MB  conda-forge
+    pysocks-1.7.1              |     pyh09c184e_7          21 KB  conda-forge
+    python-3.9.23              |h8c5b53a_0_cpython        16.2 MB  conda-forge
+    python_abi-3.9             |           9_cp39           7 KB  conda-forge
+    requests-2.27.1            |     pyhd8ed1ab_0          53 KB  conda-forge
+    setuptools-80.9.0          |     pyhff2d567_0         731 KB  conda-forge
+    tk-8.6.13                  |       h967ab96_4         3.6 MB  conda-forge
+    tzdata-2026e               |       h5d301ff_0         116 KB  conda-forge
+    ucrt-10.0.26100.0          |       h57928b3_0         678 KB  conda-forge
+    urllib3-1.26.19            |     pyhd8ed1ab_0         112 KB  conda-forge
+    vc-14.5                    |      hda273ae_43          18 KB  conda-forge
+    vc14_runtime-14.51.36247   |      h072b54c_43         821 KB  conda-forge
+    vcomp14-14.51.36247        |      h1c3f1cb_43         163 KB  conda-forge
+    wheel-0.45.1               |     pyhd8ed1ab_1          61 KB  conda-forge
+    win_inet_pton-1.1.0        |     pyh7428d3b_8           9 KB  conda-forge
+    ------------------------------------------------------------
+                                           Total:        34.9 MB
+
+The following NEW packages will be INSTALLED:
+
+  brotli-python      conda-forge/win-64::brotli-python-1.1.0-py39ha51f57c_3 
+  bzip2              conda-forge/win-64::bzip2-1.0.8-h0ad9c76_10 
+  ca-certificates    conda-forge/noarch::ca-certificates-2026.10.23-h4c7d964_0 
+  certifi            conda-forge/noarch::certifi-2025.8.3-pyhd8ed1ab_0 
+  charset-normalizer conda-forge/noarch::charset-normalizer-2.0.12-pyhd8ed1ab_0 
+  idna               conda-forge/noarch::idna-3.11-pyhf9edf01_1 
+  libexpat           conda-forge/win-64::libexpat-2.9.0-hac47afa_0 
+  libffi             conda-forge/win-64::libffi-3.7.0-h3d046cb_1 
+  liblzma            conda-forge/win-64::liblzma-5.8.3-hfd05255_1 
+  libsqlite          conda-forge/win-64::libsqlite-3.54.1-hf5d6505_101 
+  libzlib            conda-forge/win-64::libzlib-1.3.2-hfd05255_3 
+  openssl            conda-forge/win-64::openssl-3.6.5-hf411b9b_0 
+  pip                conda-forge/noarch::pip-25.2-pyh8b19718_0 
+  pysocks            conda-forge/noarch::pysocks-1.7.1-pyh09c184e_7 
+  python             conda-forge/win-64::python-3.9.23-h8c5b53a_0_cpython 
+  python_abi         conda-forge/noarch::python_abi-3.9-9_cp39 
+  requests           conda-forge/noarch::requests-2.27.1-pyhd8ed1ab_0 
+  setuptools         conda-forge/noarch::setuptools-80.9.0-pyhff2d567_0 
+  tk                 conda-forge/win-64::tk-8.6.13-h967ab96_4 
+  tzdata             conda-forge/noarch::tzdata-2026e-h5d301ff_0 
+  ucrt               conda-forge/win-64::ucrt-10.0.26100.0-h57928b3_0 
+  urllib3            conda-forge/noarch::urllib3-1.26.19-pyhd8ed1ab_0 
+  vc                 conda-forge/win-64::vc-14.5-hda273ae_43 
+  vc14_runtime       conda-forge/win-64::vc14_runtime-14.51.36247-h072b54c_43 
+  vcomp14            conda-forge/win-64::vcomp14-14.51.36247-h1c3f1cb_43 
+  wheel              conda-forge/noarch::wheel-0.45.1-pyhd8ed1ab_1 
+  win_inet_pton      conda-forge/noarch::win_inet_pton-1.1.0-pyh7428d3b_8 
+
+
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+
+> conda run -n phy3645-demo python demo_app\check_env.py
+python      : 3.9.23
+executable  : C:\Users\HP\miniconda3\envs\phy3645-demo\python.exe
+sys.prefix  : C:\Users\HP\miniconda3\envs\phy3645-demo
+isolated env: False
+requests    : 2.27.1
+os          : Windows 10
+
+> conda env list
+
+# conda environments:
+#
+# * -> active
+# + -> frozen
+base                     C:\Users\HP\miniconda3
+audio_env                C:\Users\HP\miniconda3\envs\audio_env
+phy3645-demo             C:\Users\HP\miniconda3\envs\phy3645-demo
+whisper311               C:\Users\HP\miniconda3\envs\whisper311
+zipformer                C:\Users\HP\miniconda3\envs\zipformer
+
+
+> type 05-conda\environment.yml
+name: phy3645-demo
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - requests=2.27
+
+======================================================================
+== DONE
+======================================================================
+Log saved to logs\1_python_envs.log

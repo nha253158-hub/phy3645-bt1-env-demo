@@ -1,0 +1,6 @@
+name: phy3645-demo
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - requests=2.27
