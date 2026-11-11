@@ -3,7 +3,7 @@
 **Virtual environment · Virtual machine · Docker container · Python environment managers · Git/GitHub**
 (kèm Phần 2: cài RDBMS và dùng thử SQL)
 
-- Sinh viên: _(họ tên – MSSV)_
+- Sinh viên: **Nguyễn Thị Thu Hà** – MSSV: **23001603**
 - Máy chạy demo: laptop Windows 11 (x64)
 - Toàn bộ output trong README được lấy từ log của lần chạy thật, xem thư mục [`logs/`](logs/).
 
