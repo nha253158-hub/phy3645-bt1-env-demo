@@ -1,58 +1,11 @@
-# 4_rdbms.log | 2026-11-12 01:34:33 | LAPTOP-CP64U399 | Microsoft Windows NT 10.0.26300.0
+# 4_rdbms.log | 2026-11-12 01:42:54 | LAPTOP-CP64U399 | Microsoft Windows NT 10.0.26300.0
 
 ======================================================================
 == PostgreSQL 17 (container phy3645-pg)
 ======================================================================
 
-> docker run -d --name phy3645-pg -p 5432:5432 -v phy3645-pgdata:/var/lib/postgresql/data -e POSTGRES_PASSWORD=phy3645 postgres:17
-Unable to find image 'postgres:17' locally
-17: Pulling from library/postgres
-046371a447cc: Pulling fs layer
-0eab0a63b06d: Pulling fs layer
-56c5b61c6d2b: Pulling fs layer
-ceeafc939069: Pulling fs layer
-9de238338a9a: Pulling fs layer
-275aa943d416: Pulling fs layer
-5760334e16b5: Pulling fs layer
-d35c08e535dc: Pulling fs layer
-4f0fb6572de8: Pulling fs layer
-37fb86c2a767: Pulling fs layer
-c2f4b34f5119: Pulling fs layer
-f0f18338e0da: Pulling fs layer
-d717e9509665: Pulling fs layer
-c97a680633a2: Pulling fs layer
-37fb86c2a767: Already exists
-0eab0a63b06d: Download complete
-5760334e16b5: Download complete
-ceeafc939069: Download complete
-4f0fb6572de8: Download complete
-f0f18338e0da: Download complete
-046371a447cc: Download complete
-56c5b61c6d2b: Download complete
-275aa943d416: Download complete
-d717e9509665: Download complete
-d35c08e535dc: Download complete
-c2f4b34f5119: Download complete
-c97a680633a2: Download complete
-56c5b61c6d2b: Pull complete
-b40edbb0adb6: Download complete
-c2f4b34f5119: Pull complete
-d717e9509665: Pull complete
-046371a447cc: Pull complete
-c97a680633a2: Pull complete
-0eab0a63b06d: Pull complete
-f0f18338e0da: Pull complete
-b9ed2b0f585a: Download complete
-9de238338a9a: Download complete
-9de238338a9a: Pull complete
-5760334e16b5: Pull complete
-275aa943d416: Pull complete
-d35c08e535dc: Pull complete
-ceeafc939069: Pull complete
-4f0fb6572de8: Pull complete
-Digest: sha256:ff87138949ad9a46f32ff23bd6852b52ce024a13dffe9b4087be98292cdd3b4f
-Status: Downloaded newer image for postgres:17
-2ceb402c3973e94f813f180032d457c718b83dc4ff480ed60e43fbc93030980e
+> docker start phy3645-pg
+phy3645-pg
 waiting for PostgreSQL to accept TCP connections...
 PostgreSQL is ready.
 
@@ -66,7 +19,6 @@ SELECT version();
 (1 row)
 
 DROP DATABASE IF EXISTS school;
-psql:/tmp/01_postgres.sql:4: NOTICE:  database "school" does not exist, skipping
 DROP DATABASE
 CREATE DATABASE school;
 CREATE DATABASE
@@ -92,7 +44,7 @@ CREATE TABLE enrollments (
 );
 CREATE TABLE
 INSERT INTO students (full_name, class_name, birth_date) VALUES
-    ('Nguyễn Thu Hà',   'K68A3', '2005-03-12'),
+    ('Vũ Thanh Mai',   'K68A3', '2005-03-12'),
     ('Trần Minh Khoa',  'K68A3', '2005-07-01'),
     ('Lê Phương Anh',   'K68A2', '2005-11-23'),
     ('Phạm Quốc Bảo',   'K68A2', '2004-12-30'),
@@ -121,12 +73,12 @@ ORDER BY s.full_name, c.course_code;
  Đỗ Gia Linh    | Thực tập Tin học ứng dụng | 10.00
  Lê Phương Anh  | Thị giác máy tính         |  7.00
  Lê Phương Anh  | Thực tập Tin học ứng dụng |  8.00
- Nguyễn Thu Hà  | Cơ sở dữ liệu             |  8.50
- Nguyễn Thu Hà  | Thị giác máy tính         |  9.50
- Nguyễn Thu Hà  | Thực tập Tin học ứng dụng |  9.00
  Phạm Quốc Bảo  | Cơ sở dữ liệu             |  5.50
  Trần Minh Khoa | Cơ sở dữ liệu             |  6.00
  Trần Minh Khoa | Thực tập Tin học ứng dụng |  7.50
+ Vũ Thanh Mai   | Cơ sở dữ liệu             |  8.50
+ Vũ Thanh Mai   | Thị giác máy tính         |  9.50
+ Vũ Thanh Mai   | Thực tập Tin học ứng dụng |  9.00
 (10 rows)
 
 SELECT c.course_code, COUNT(*) AS n_students, ROUND(AVG(e.score), 2) AS avg_score
@@ -165,7 +117,7 @@ ORDER BY gpa DESC
 LIMIT 3;
    full_name   | gpa  
 ---------------+------
- Nguyễn Thu Hà | 9.00
+ Vũ Thanh Mai  | 9.00
  Đỗ Gia Linh   | 9.00
  Lê Phương Anh | 7.50
 (3 rows)
@@ -193,6 +145,8 @@ SELECT course_code, score FROM enrollments WHERE course_code = 'INT2211';
 (3 rows)
 
 INSERT INTO enrollments VALUES (4, 'PHY3645', 11);
+psql:/tmp/01_postgres.sql:84: ERROR:  new row for relation "enrollments" violates check constraint "enrollments_score_check"
+DETAIL:  Failing row contains (4, PHY3645, 11.00).
             List of relations
  Schema |    Name     | Type  |  Owner   
 --------+-------------+-------+----------
@@ -201,8 +155,6 @@ INSERT INTO enrollments VALUES (4, 'PHY3645', 11);
  public | students    | table | postgres
 (3 rows)
 
-psql:/tmp/01_postgres.sql:84: ERROR:  new row for relation "enrollments" violates check constraint "enrollments_score_check"
-DETAIL:  Failing row contains (4, PHY3645, 11.00).
                                   Table "public.students"
    Column   |          Type          | Collation | Nullable |           Default            
 ------------+------------------------+-----------+----------+------------------------------
@@ -220,44 +172,8 @@ Referenced by:
 == MySQL 8.4 LTS (container phy3645-mysql)
 ======================================================================
 
-> docker run -d --name phy3645-mysql -p 3306:3306 -v phy3645-mysqldata:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=phy3645 mysql:8.4
-Unable to find image 'mysql:8.4' locally
-8.4: Pulling from library/mysql
-335c0ba6129f: Pulling fs layer
-16ff0dc0f366: Pulling fs layer
-a8a79f346bc1: Pulling fs layer
-0b3d5697e820: Pulling fs layer
-abda743cff12: Pulling fs layer
-084e06fe4d96: Pulling fs layer
-332288060cf8: Pulling fs layer
-5a7ab34260fd: Pulling fs layer
-c3e99775cc39: Pulling fs layer
-b14917cf1885: Pulling fs layer
-335c0ba6129f: Download complete
-16ff0dc0f366: Download complete
-0b3d5697e820: Download complete
-084e06fe4d96: Download complete
-332288060cf8: Download complete
-5a7ab34260fd: Download complete
-abda743cff12: Download complete
-a8a79f346bc1: Download complete
-c3e99775cc39: Download complete
-2047ca069dcd: Download complete
-6f4c84f51b8c: Download complete
-c3e99775cc39: Pull complete
-332288060cf8: Pull complete
-5a7ab34260fd: Pull complete
-335c0ba6129f: Pull complete
-abda743cff12: Pull complete
-084e06fe4d96: Pull complete
-b14917cf1885: Download complete
-16ff0dc0f366: Pull complete
-a8a79f346bc1: Pull complete
-0b3d5697e820: Pull complete
-b14917cf1885: Pull complete
-Digest: sha256:a81d043930e51745522bd5c430961cf8286f0a23f0a9a2a6e0108f7ea71b0902
-Status: Downloaded newer image for mysql:8.4
-c388ae054944dba2664d6c9781b058bd7f9fa4eb3a02362f0efd9a2d434fef1d
+> docker start phy3645-mysql
+phy3645-mysql
 waiting for MySQL to accept TCP connections...
 MySQL is ready.
 
@@ -285,13 +201,13 @@ SELECT VERSION()
 DROP DATABASE IF EXISTS school
 --------------
 
-Query OK, 0 rows affected, 1 warning (0.01 sec)
+Query OK, 3 rows affected (0.22 sec)
 
 --------------
 CREATE DATABASE school CHARACTER SET utf8mb4
 --------------
 
-Query OK, 1 row affected (0.00 sec)
+Query OK, 1 row affected (0.01 sec)
 
 --------------
 CREATE TABLE students (
@@ -302,7 +218,7 @@ CREATE TABLE students (
 )
 --------------
 
-Query OK, 0 rows affected (0.05 sec)
+Query OK, 0 rows affected (0.04 sec)
 
 --------------
 CREATE TABLE courses (
@@ -312,7 +228,7 @@ CREATE TABLE courses (
 )
 --------------
 
-Query OK, 0 rows affected (0.04 sec)
+Query OK, 0 rows affected (0.06 sec)
 
 --------------
 CREATE TABLE enrollments (
@@ -325,18 +241,18 @@ CREATE TABLE enrollments (
 )
 --------------
 
-Query OK, 0 rows affected (0.04 sec)
+Query OK, 0 rows affected (0.06 sec)
 
 --------------
 INSERT INTO students (full_name, class_name, birth_date) VALUES
-    ('Nguyễn Thu Hà',   'K68A3', '2005-03-12'),
+    ('Vũ Thanh Mai',   'K68A3', '2005-03-12'),
     ('Trần Minh Khoa',  'K68A3', '2005-07-01'),
     ('Lê Phương Anh',   'K68A2', '2005-11-23'),
     ('Phạm Quốc Bảo',   'K68A2', '2004-12-30'),
     ('Đỗ Gia Linh',     'K68A1', '2005-05-05')
 --------------
 
-Query OK, 5 rows affected (0.01 sec)
+Query OK, 5 rows affected (0.02 sec)
 Records: 5  Duplicates: 0  Warnings: 0
 
 --------------
@@ -346,7 +262,7 @@ INSERT INTO courses VALUES
     ('INT3404', 'Thị giác máy tính',         3)
 --------------
 
-Query OK, 3 rows affected (0.01 sec)
+Query OK, 3 rows affected (0.00 sec)
 Records: 3  Duplicates: 0  Warnings: 0
 
 --------------
@@ -382,20 +298,21 @@ ORDER BY s.full_name, c.course_code
 | Đỗ Gia Linh         | Thực tập Tin học ứng dụng           | 10.00 |
 | Lê Phương Anh       | Thị giác máy tính                   |  7.00 |
 | Lê Phương Anh       | Thực tập Tin học ứng dụng           |  8.00 |
-| Nguyễn Thu Hà       | Cơ sở dữ liệu                       |  8.50 |
-| Nguyễn Thu Hà       | Thị giác máy tính                   |  9.50 |
-| Nguyễn Thu Hà       | Thực tập Tin học ứng dụng           |  9.00 |
 | Phạm Quốc Bảo       | Cơ sở dữ liệu                       |  5.50 |
 | Trần Minh Khoa      | Cơ sở dữ liệu                       |  6.00 |
 | Trần Minh Khoa      | Thực tập Tin học ứng dụng           |  7.50 |
+| Vũ Thanh Mai        | Cơ sở dữ liệu                       |  8.50 |
+| Vũ Thanh Mai        | Thị giác máy tính                   |  9.50 |
+| Vũ Thanh Mai        | Thực tập Tin học ứng dụng           |  9.00 |
 +---------------------+-------------------------------------+-------+
-10 rows in set (0.00 sec)
+10 rows in set (0.01 sec)
 
 --------------
 -- 2. GROUP BY + HAVING
 --------------
 
 Query OK, 0 rows affected (0.00 sec)
+ERROR 3819 (HY000) at line 87 in file: '/tmp/02_mysql.sql': Check constraint 'enrollments_chk_1' is violated.
 
 --------------
 SELECT course_code, COUNT(*) AS n_students, ROUND(AVG(score), 2) AS avg_score
@@ -412,7 +329,7 @@ ORDER BY avg_score DESC
 | INT3404     |          3 |      8.17 |
 | INT2211     |          3 |      6.67 |
 +-------------+------------+-----------+
-3 rows in set (0.01 sec)
+3 rows in set (0.00 sec)
 
 --------------
 -- 3. Window function (MySQL >= 8.0)
@@ -459,13 +376,12 @@ LIMIT 3
 +------------------+------+
 | full_name        | gpa  |
 +------------------+------+
-| Nguyễn Thu Hà    | 9.00 |
+| Vũ Thanh Mai     | 9.00 |
 | Đỗ Gia Linh      | 9.00 |
 | Lê Phương Anh    | 7.50 |
 +------------------+------+
 3 rows in set (0.00 sec)
 
-ERROR 3819 (HY000) at line 87 in file: '/tmp/02_mysql.sql': Check constraint 'enrollments_chk_1' is violated.
 --------------
 -- 5. Transaction + ROLLBACK
 --------------
@@ -482,7 +398,7 @@ Query OK, 0 rows affected (0.00 sec)
 UPDATE enrollments SET score = 0 WHERE course_code = 'INT2211'
 --------------
 
-Query OK, 3 rows affected (0.00 sec)
+Query OK, 3 rows affected (0.01 sec)
 Rows matched: 3  Changed: 3  Warnings: 0
 
 --------------
@@ -568,9 +484,9 @@ Bye
 ======================================================================
 
 > docker ps --filter name=phy3645
-CONTAINER ID   IMAGE         COMMAND                  CREATED              STATUS              PORTS                                         NAMES
-c388ae054944   mysql:8.4     "docker-entrypoint.s…"   33 seconds ago       Up 32 seconds       0.0.0.0:3306->3306/tcp, [::]:3306->3306/tcp   phy3645-mysql
-2ceb402c3973   postgres:17   "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp   phy3645-pg
+CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS         PORTS                                         NAMES
+c388ae054944   mysql:8.4     "docker-entrypoint.s…"   6 minutes ago   Up 6 minutes   0.0.0.0:3306->3306/tcp, [::]:3306->3306/tcp   phy3645-mysql
+2ceb402c3973   postgres:17   "docker-entrypoint.s…"   8 minutes ago   Up 7 minutes   0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp   phy3645-pg
 
 Connect with a GUI (pgAdmin / DBeaver / MySQL Workbench): host=localhost, user=postgres or root, password=phy3645
 Interactive shells:  docker exec -it phy3645-pg psql -U postgres -d school

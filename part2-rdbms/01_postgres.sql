@@ -28,7 +28,7 @@ CREATE TABLE enrollments (
 
 -- ---------- DML: them du lieu ----------
 INSERT INTO students (full_name, class_name, birth_date) VALUES
-    ('Nguyễn Thu Hà',   'K68A3', '2005-03-12'),
+    ('Vũ Thanh Mai',   'K68A3', '2005-03-12'),
     ('Trần Minh Khoa',  'K68A3', '2005-07-01'),
     ('Lê Phương Anh',   'K68A2', '2005-11-23'),
     ('Phạm Quốc Bảo',   'K68A2', '2004-12-30'),

@@ -190,13 +190,19 @@ Docker chạy trong một máy ảo Linux (WSL2) với kernel `6.6.87.2-microsof
 ### 3.1 Tự build image từ Dockerfile
 [`06-docker/Dockerfile`](06-docker/Dockerfile):
 ```dockerfile
-FROM python:3.12-slim                                 # image gốc: Debian slim + Python 3.12
-WORKDIR /app                                          # thư mục làm việc trong container
+# image gốc: Debian slim + Python 3.12
+FROM python:3.12-slim
+# thư mục làm việc trong container
+WORKDIR /app
+# cài thư viện trước -> layer này được cache, sửa code không phải cài lại
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt    # layer cài thư viện (được cache)
-COPY app.py .                                         # sửa code chỉ build lại layer này
-CMD ["python", "app.py"]                              # lệnh chạy khi start container
+RUN pip install --no-cache-dir -r requirements.txt
+# copy code (sửa code chỉ build lại từ layer này)
+COPY app.py .
+# lệnh chạy khi start container
+CMD ["python", "app.py"]
 ```
+(Dockerfile chỉ cho phép comment `#` ở **đầu dòng**.)
 ```text
 > docker build -t phy3645-env-demo 06-docker
 #4 [1/5] FROM docker.io/library/python:3.12-slim
@@ -288,7 +294,9 @@ VBoxManage controlvm phy3645-alpine poweroff
 ### 4.2 Bên trong VM
 Lệnh đã gõ trong VM: `uname -a; head -3 /etc/os-release; echo CPUs: $(nproc); free -m; fdisk -l /dev/sda | head -1; dmesg | grep -m1 -i hypervisor`
 
-![Console của máy ảo Alpine](07-vm/vm_console.png)
+![Console của máy ảo Alpine](07-vm/vm_console_crop.png)
+
+(Ảnh gốc toàn màn hình console: [`07-vm/vm_console.png`](07-vm/vm_console.png))
 
 Đọc kết quả:
 - `Linux localhost 6.12.51-0-virt`: VM boot **kernel Linux riêng**, khác kernel Windows của host và khác cả kernel `6.6.87.2-microsoft-standard-WSL2` mà các container Docker dùng chung.
@@ -318,7 +326,7 @@ git push -u origin main
 ```
 Các lệnh hay dùng khác: `git status`, `git log --oneline`, `git diff`, `git clone <url>`, `git pull`, `git switch -c <branch>`.
 
-<!-- RESULTS_GIT_LOG -->
+Repo nộp bài: https://github.com/nha253158-hub/phy3645-bt1-env-demo
 
 
 ---
@@ -379,7 +387,7 @@ Script: [`part2-rdbms/01_postgres.sql`](part2-rdbms/01_postgres.sql) và [`part2
 | full_name | course_name | score |
 |---|---|---|
 | Đỗ Gia Linh | Thực tập Tin học ứng dụng | 10.00 |
-| Nguyễn Thu Hà | Thị giác máy tính | 9.50 |
+| Vũ Thanh Mai | Thị giác máy tính | 9.50 |
 | Phạm Quốc Bảo | Cơ sở dữ liệu | 5.50 |
 | … | … | … |
 
@@ -448,5 +456,5 @@ Chạy lại trên Windows: double-click lần lượt `run_1_python_envs.bat`, 
 - Docker docs – overview: https://docs.docker.com/get-started/docker-overview/
 - Docker Desktop WSL2 backend: https://docs.docker.com/desktop/features/wsl/
 - VirtualBox manual: https://www.virtualbox.org/manual/
-- Pro Git book (tiếng Việt có bản dịch): https://git-scm.com/book
+- Pro Git book: https://git-scm.com/book
 - PostgreSQL docs: https://www.postgresql.org/docs/ · MySQL docs: https://dev.mysql.com/doc/

@@ -23,7 +23,10 @@ if (-not $name) { Write-Log 'git user.name is not set: run  git config --global 
 
 Run 'git add -A' $git @('add', '-A')
 Run 'git status --short' $git @('status', '--short')
-Run 'git commit -m "Bai tap 1: venv, virtualenv, uv, pyenv, conda, Docker, VM + Phan 2 RDBMS"' $git @('commit', '-q', '-m', 'Bai tap 1: venv, virtualenv, uv, pyenv, conda, Docker, VM + Phan 2 RDBMS')
+$null = Capture $git @('rev-parse', '--verify', 'HEAD')
+if ($script:Code -eq 0) { $msg = 'Cap nhat bai tap 1: README, log, du lieu mau' }
+else { $msg = 'Bai tap 1: venv, virtualenv, uv, pyenv, conda, Docker, VM + Phan 2 RDBMS' }
+Run "git commit -m `"$msg`"" $git @('commit', '-q', '-m', $msg)
 Run 'git branch -M main' $git @('branch', '-M', 'main')
 
 if ($Remote) {
